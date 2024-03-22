@@ -54,7 +54,7 @@ class Reservation {
            WHERE id = $1`,
       [reservationId],
     );
-
+    console.log("reservation1", results.rows[0]);
     return results.rows[0];
   }
 

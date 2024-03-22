@@ -95,14 +95,15 @@ router.post("/:id/add-reservation/", async function (req, res, next) {
 
 /** Handle editing a reservation. */
 
-router.post("/:id/edit/reservation/", async function (req, res, next) {
+router.post("/reservation/:id/edit/", async function (req, res, next) {
   if (req.body === undefined) {
     throw new BadRequestError();
   }
 
   const reservation = await Reservation.getReservation(req.params.id);
 
-  console.log(reservation);
+
+  console.log("reservation: ", reservation);
 
   reservation.startAt = new Date(req.body.startAt);
   reservation.numGuests = req.body.numGuests;
