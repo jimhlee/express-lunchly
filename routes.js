@@ -107,14 +107,19 @@ router.post("/:id/add-reservation/", async function (req, res, next) {
 
 /** Handle editing a reservation. */
 
-router.post("/:id/edit/reservation/", async function (req, res, next) {
+router.post("/reservation/:id/edit/", async function (req, res, next) {
   if (req.body === undefined) {
     throw new BadRequestError();
   }
 
   const reservation = await Reservation.getReservation(req.params.id);
 
+<<<<<<< HEAD
   console.log('before edit', reservation);
+=======
+
+  console.log("reservation: ", reservation);
+>>>>>>> 11cedbe7a5058d184a1453795c15503e678eb992
 
   reservation.startAt = new Date(req.body.startAt);
   reservation.numGuests = +req.body.numGuests;
