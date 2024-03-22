@@ -13,13 +13,14 @@ const router = new express.Router();
 /** Homepage: show list of customers. */
 
 router.get("/", async function (req, res, next) {
-  let customers;
-
-  if (req.query.search) {
-    customers = await Customer.search(req.query.search);
-  } else {
-    customers = await Customer.all();
+  let searchTerm = req.query.search;
+  console.log(searchTerm)
+  if (!searchTerm) {
+    searchTerm = '';
   }
+
+  let customers = await Customer.all(searchTerm);
+
 
   return res.render("customer_list.jinja", { customers });
 });
@@ -37,7 +38,7 @@ router.get("/add/", async function (req, res, next) {
 router.get("/top-ten/", async function (req, res, next) {
   const customers = await Customer.getTopTen();
 
-  return res.render("customer_list.jinja", { customers });
+  return res.render("top-ten.jinja", { customers });
 });
 
 
@@ -92,7 +93,7 @@ router.post("/:id/edit/", async function (req, res, next) {
 
 router.post("/:id/add-reservation/", async function (req, res, next) {
   if (req.body === undefined) {
-    throw new BadRequestError();
+    throw new BadRequestError('Invalid request, must fill out all fields');
   }
   const customerId = req.params.id;
   const startAt = new Date(req.body.startAt);

@@ -5,6 +5,7 @@
 const moment = require("moment");
 
 const db = require("../db");
+const { BadRequestError } = require("../expressError");
 
 /** A reservation for a party */
 
@@ -70,12 +71,16 @@ class Reservation {
   // TODO: Check when reservation is empty
   async save() {
     if (this.id === undefined) {
+      if (this.startAt === undefined) {
+        return BadRequestError()
+      }
       const result = await db.query(
         `INSERT INTO reservations (customer_id, start_at, num_guests, notes)
              VALUES ($1, $2, $3, $4)
              RETURNING id`,
         [this.customerId, this.startAt, this.numGuests, this.notes],
       );
+
       this.id = result.rows[0].id;
     } else {
       await db.query(
