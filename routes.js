@@ -92,4 +92,34 @@ router.post("/:id/add-reservation/", async function (req, res, next) {
   return res.redirect(`/${customerId}/`);
 });
 
+
+/** Handle editing a reservation. */
+
+router.post("/:id/edit/reservation/", async function (req, res, next) {
+  if (req.body === undefined) {
+    throw new BadRequestError();
+  }
+
+  const reservation = await Reservation.getReservation(req.params.id);
+
+  console.log(reservation);
+
+  reservation.startAt = new Date(req.body.startAt);
+  reservation.numGuests = req.body.numGuests;
+  reservation.notes = req.body.notes;
+
+  await reservation.save();
+
+  return res.redirect(`/${reservation.customerId}/`);
+});
+
+
+/** Show form to edit a reservation. */
+
+router.get("/reservation/:id/edit/", async function (req, res, next) {
+  const reservation = await Reservation.getReservation(req.params.id);
+
+  res.render("reservation_edit_form.jinja", { reservation });
+});
+
 module.exports = router;
