@@ -16,7 +16,7 @@ class Customer {
     this.notes = notes;
   }
 
-  /** find all customers. */
+  /** Find all customers. */
 
   static async all() {
     const results = await db.query(
@@ -94,6 +94,21 @@ class Customer {
   /** Gets full name of specific customer */
   fullName() {
     return `${this.firstName} ${this.lastName}`
+  }
+
+  /** Filters list of customers by search term. */
+  static async search(searchTerm) {
+    console.log('search term', `%${searchTerm}%`)
+    const results = await db.query(
+          `SELECT id,
+                  first_name AS "firstName",
+                  last_name  AS "lastName"
+           FROM customers
+           WHERE CONCAT(first_name, ' ', last_name) ILIKE $1
+           ORDER BY last_name, first_name`,
+           [`%${searchTerm}%`]
+    );
+    return results.rows.map(c => new Customer(c));
   }
 }
 

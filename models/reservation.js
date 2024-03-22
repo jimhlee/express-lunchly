@@ -55,7 +55,15 @@ class Reservation {
       [reservationId],
     );
 
-    return results.rows[0];
+    const reservation = results.rows[0];
+
+    if (reservation === undefined) {
+      const err = new Error(`No such reservation: ${reservationId}`);
+      err.status = 404;
+      throw err;
+    }
+
+    return new Reservation(reservation);
   }
 
   /** save this reservation. */
