@@ -20,6 +20,7 @@ class Reservation {
   /** formatter for startAt */
 
   getFormattedStartAt() {
+    // What does the 'Do' and 'a' mean here?
     return moment(this.startAt).format("MMMM Do YYYY, h:mm a");
   }
 
