@@ -24,14 +24,20 @@ router.get("/", async function (req, res, next) {
   return res.render("customer_list.jinja", { customers });
 });
 
-router.get("/:search", async function (req, res, next) {
-  return res.render("customer_new_form.jinja");
-});
 
 /** Form to add a new customer. */
 
 router.get("/add/", async function (req, res, next) {
   return res.render("customer_new_form.jinja");
+});
+
+/**
+ * Returns top 10 customers by number of reservations
+ */
+router.get("/top-ten/", async function (req, res, next) {
+  const customers = await Customer.getTopTen();
+
+  return res.render("customer_list.jinja", { customers });
 });
 
 
@@ -114,18 +120,11 @@ router.post("/reservation/:id/edit/", async function (req, res, next) {
 
   const reservation = await Reservation.getReservation(req.params.id);
 
-<<<<<<< HEAD
-  console.log('before edit', reservation);
-=======
-
-  console.log("reservation: ", reservation);
->>>>>>> 11cedbe7a5058d184a1453795c15503e678eb992
 
   reservation.startAt = new Date(req.body.startAt);
   reservation.numGuests = +req.body.numGuests;
   reservation.notes = req.body.notes;
 
-  console.log('after edit', reservation);
   await reservation.save();
 
   return res.redirect(`/${reservation.customerId}/`);

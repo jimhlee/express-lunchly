@@ -67,7 +67,7 @@ class Reservation {
   }
 
   /** save this reservation. */
-
+  // TODO: Check when reservation is empty
   async save() {
     if (this.id === undefined) {
       const result = await db.query(
@@ -94,8 +94,6 @@ class Reservation {
       );
     }
   }
-
-
 
 }
 
